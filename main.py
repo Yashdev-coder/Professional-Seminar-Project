@@ -83,7 +83,7 @@ thank_you_html = '''
 @app.route('/')
 def index():
     # Generate the QR code that links to the form page
-    form_url = "https://7d407cc3-a628-4d8d-96d4-5b6412acc79f-00-u9x8ktjtlezd.janeway.replit.dev/form"
+    form_url = "https://25c00628-ed16-4b87-8909-37f01bcf3a98-00-2cxdzekuet8g4.kirk.replit.dev/"
     qr_code = qrcode.make(form_url)
     qr_code_filename = 'qrcode.png'
 
