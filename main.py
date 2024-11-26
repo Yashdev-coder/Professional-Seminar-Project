@@ -32,15 +32,25 @@ index_html = '''
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code for Student Data Entry</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/1.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
 </head>
-<body class="text-center p-5 bg-light">
-    <div class="container">
-        <h1 class="mb-4">Scan the QR Code to Enter Your Details</h1>
+<body class="text-center p-5">
+    <div class="container bg-dark p-4 rounded">
+    <h1 class="mb-4">Persistent Education Technologies</h1>
+    <h2 class="mb-4">Session - 1</h2>
+        <h3 class="mb-4">Scan the QR Code to Enter Your Details</h3>
 
         <!-- Display QR Code Image -->
         <img src="{{ url_for('static', filename=qr_code_filename) }}" alt="QR Code" width="200" class="mb-4">
 
-        <p>Scan the QR code or click <a href="{{ url_for('form') }}">here</a> to enter your details manually.</p>
+        <p>Scan the QR code or click <a href="{{ url_for('form') }}" class="text-info">here</a> to enter your details manually.</p>
     </div>
 </body>
 </html>
@@ -55,9 +65,17 @@ form_html = '''
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Data Entry</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/2.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
 </head>
-<body class="p-5 bg-light">
-    <div class="container col-md-6 offset-md-3">
+<body class="p-5">
+    <div class="container col-md-6 offset-md-3 bg-dark p-4 rounded">
         <h1 class="mb-4">Enter Your Details</h1>
         <form action="{{ url_for('form') }}" method="POST">
             <div class="form-group">
@@ -86,9 +104,17 @@ feedback_html = '''
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Form</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/3.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
 </head>
-<body class="p-5 bg-light">
-    <div class="container col-md-6 offset-md-3">
+<body class="p-5">
+    <div class="container col-md-6 offset-md-3 bg-dark p-4 rounded">
         <h1 class="mb-4">We Value Your Feedback!</h1>
         <form action="{{ url_for('feedback') }}" method="POST">
             <div class="form-group">
@@ -116,13 +142,21 @@ thank_you_html = '''
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/3.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
 </head>
-<body class="text-center p-5 bg-light">
-    <div class="container">
+<body class="text-center p-5">
+    <div class="container bg-dark p-4 rounded">
         <h1>Thank You for Submitting Your Details!</h1>
         <p>Your data has been successfully saved.</p>
         <a href="/" class="btn btn-info mt-3">Go back to the homepage</a><br>
-        <a href="/feedback" class="btn btn-outline-secondary mt-2">Submit Your Feedback</a>
+        <a href="/feedback" class="btn btn-primary mt-2">Submit Your Feedback</a>
     </div>
 </body>
 </html>
@@ -137,9 +171,17 @@ thank_you_feedback_html = '''
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/5.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
 </head>
-<body class="text-center p-5 bg-light">
-    <div class="container">
+<body class="text-center p-5">
+    <div class="container bg-dark p-4 rounded">
         <h1>Thank You for Your Feedback!</h1>
         <p>Your feedback has been successfully saved.</p>
         <a href="/" class="btn btn-info mt-3">Go back to the homepage</a>
