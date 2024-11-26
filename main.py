@@ -31,14 +31,17 @@ index_html = '''
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code for Student Data Entry</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Scan the QR Code to Enter Your Details</h1>
+<body class="text-center p-5 bg-light">
+    <div class="container">
+        <h1 class="mb-4">Scan the QR Code to Enter Your Details</h1>
 
-    <!-- Display QR Code Image -->
-    <img src="{{ url_for('static', filename=qr_code_filename) }}" alt="QR Code" width="200">
+        <!-- Display QR Code Image -->
+        <img src="{{ url_for('static', filename=qr_code_filename) }}" alt="QR Code" width="200" class="mb-4">
 
-    <p>Scan the QR code or click <a href="{{ url_for('form') }}">here</a> to enter your details manually.</p>
+        <p>Scan the QR code or click <a href="{{ url_for('form') }}">here</a> to enter your details manually.</p>
+    </div>
 </body>
 </html>
 '''
@@ -51,19 +54,25 @@ form_html = '''
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Data Entry</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Enter Your Details</h1>
+<body class="p-5 bg-light">
+    <div class="container col-md-6 offset-md-3">
+        <h1 class="mb-4">Enter Your Details</h1>
+        <form action="{{ url_for('form') }}" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name" required>
+            </div>
 
-    <form action="{{ url_for('form') }}" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" name="name" required><br><br>
+            <div class="form-group">
+                <label for="student_id">Student ID:</label>
+                <input type="text" class="form-control" name="student_id" required>
+            </div>
 
-        <label for="student_id">Student ID:</label>
-        <input type="text" name="student_id" required><br><br>
-
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
 '''
@@ -76,19 +85,25 @@ feedback_html = '''
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>We Value Your Feedback!</h1>
+<body class="p-5 bg-light">
+    <div class="container col-md-6 offset-md-3">
+        <h1 class="mb-4">We Value Your Feedback!</h1>
+        <form action="{{ url_for('feedback') }}" method="POST">
+            <div class="form-group">
+                <label for="student_id">Student ID:</label>
+                <input type="text" class="form-control" name="student_id" required>
+            </div>
 
-    <form action="{{ url_for('feedback') }}" method="POST">
-        <label for="student_id">Student ID:</label>
-        <input type="text" name="student_id" required><br><br>
+            <div class="form-group">
+                <label for="feedback">Feedback:</label>
+                <textarea name="feedback" class="form-control" rows="4" required></textarea>
+            </div>
 
-        <label for="feedback">Feedback:</label><br>
-        <textarea name="feedback" rows="4" cols="50" required></textarea><br><br>
-
-        <button type="submit">Submit Feedback</button>
-    </form>
+            <button type="submit" class="btn btn-success mt-3">Submit Feedback</button>
+        </form>
+    </div>
 </body>
 </html>
 '''
@@ -100,13 +115,15 @@ thank_you_html = '''
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Thank You for Submitting Your Details!</h1>
-    <p>Your data has been successfully saved.</p>
-    <a href="/">Go back to the homepage</a>
-    <a href="/feedback">Submit Your Feedback</a>
-
+<body class="text-center p-5 bg-light">
+    <div class="container">
+        <h1>Thank You for Submitting Your Details!</h1>
+        <p>Your data has been successfully saved.</p>
+        <a href="/" class="btn btn-info mt-3">Go back to the homepage</a><br>
+        <a href="/feedback" class="btn btn-outline-secondary mt-2">Submit Your Feedback</a>
+    </div>
 </body>
 </html>
 '''
@@ -119,11 +136,14 @@ thank_you_feedback_html = '''
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Thank You for Your Feedback!</h1>
-    <p>Your feedback has been successfully saved.</p>
-    <a href="/">Go back to the homepage</a>
+<body class="text-center p-5 bg-light">
+    <div class="container">
+        <h1>Thank You for Your Feedback!</h1>
+        <p>Your feedback has been successfully saved.</p>
+        <a href="/" class="btn btn-info mt-3">Go back to the homepage</a>
+    </div>
 </body>
 </html>
 '''
@@ -131,7 +151,7 @@ thank_you_feedback_html = '''
 @app.route('/')
 def index():
     # Generate the QR code that links to the form page
-    form_url = "https://25c00628-ed16-4b87-8909-37f01bcf3a98-00-2cxdzekuet8g4.kirk.replit.dev/form"
+    form_url = request.url_root + "form"
     qr_code = qrcode.make(form_url)
     qr_code_filename = 'qrcode.png'
 
@@ -143,34 +163,22 @@ def index():
     # Save the QR code in the 'static' folder
     qr_code.save(qr_code_path)
 
-    return render_template_string(index_html, qr_code_filename = qr_code_filename)
+    return render_template_string(index_html, qr_code_filename=qr_code_filename)
 
 @app.route('/form', methods=['GET', 'POST'])
 def form():
     if request.method == 'POST':
-        # Debugging: print form data to the console to check what is coming from the form
-        print(f"Form Data: {request.form}")
-
-        # Ensure the form has 'name' and 'student_id' fields
-        if 'name' not in request.form or 'student_id' not in request.form:
-            return 'Missing form data', 400  # Return a Bad Request error if any key is missing
-
         # Get the form data
         name = request.form['name']
         student_id = request.form['student_id']
-        # Load the current CSV data
-        df = pd.read_csv(CSV_FILE)
-
-        # Check if the student ID already exists for the current session
-        if ((df['Name'] == name) & (df['Student ID'] == student_id)).any():
-            # If an entry with the same name and student ID exists, return a duplicate message
-            return 'Duplicate entry detected. You have already submitted your details.', 400
-
-        # If no duplicate entry exists, add the new data
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        # Save the data to CSV
+        df = pd.read_csv(CSV_FILE)
         new_data = pd.DataFrame({"Name": [name], "Student ID": [student_id], "Timestamp": [timestamp]})
         df = pd.concat([df, new_data], ignore_index=True)
         df.to_csv(CSV_FILE, index=False)
+
         # Redirect to thank you page after saving data
         return redirect(url_for('thank_you'))
 
