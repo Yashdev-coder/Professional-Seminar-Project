@@ -1,5 +1,5 @@
 import os 
-from flask import Flask, render_template_string, request, redirect, url_for
+from flask import Flask, render_template_string, request, redirect, url_for, send_file
 import qrcode
 import pandas as pd
 from datetime import datetime
@@ -43,14 +43,17 @@ index_html = '''
 </head>
 <body class="text-center p-5">
     <div class="container bg-dark p-4 rounded">
-    <h1 class="mb-4">Persistent Education Technologies</h1>
-    <h2 class="mb-4">Session - 1</h2>
+        <h1 class="mb-4">Persistent Education Technologies</h1>
+        <h2 class="mb-4">Session - 1</h2>
         <h3 class="mb-4">Scan the QR Code to Enter Your Details</h3>
 
         <!-- Display QR Code Image -->
         <img src="{{ url_for('static', filename=qr_code_filename) }}" alt="QR Code" width="200" class="mb-4">
 
         <p>Scan the QR code or click <a href="{{ url_for('form') }}" class="text-info">here</a> to enter your details manually.</p>
+
+        <hr class="my-4">
+        <p><a href="{{ url_for('login') }}" class="btn btn-warning">Professor Login</a></p>
     </div>
 </body>
 </html>
@@ -90,6 +93,7 @@ form_html = '''
 
             <button type="submit" class="btn btn-primary mt-3">Submit</button>
         </form>
+        <a href="/" class="btn btn-info mt-3">Go back to homepage</a>
     </div>
 </body>
 </html>
@@ -129,10 +133,40 @@ feedback_html = '''
 
             <button type="submit" class="btn btn-success mt-3">Submit Feedback</button>
         </form>
+        <a href="/" class="btn btn-info mt-3">Go back to homepage</a>
     </div>
 </body>
 </html>
 '''
+
+# HTML template for the thank you page after feedback
+thank_you_feedback_html = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/3.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
+</head>
+<body class="text-center p-5">
+    <div class="container bg-dark p-4 rounded">
+        <h1>Thank You for Your Feedback!</h1>
+        <p>Your feedback has been successfully saved.</p>
+        <a href="/" class="btn btn-info mt-3">Go back to the homepage</a>
+    </div>
+</body>
+</html>
+'''
+
 # HTML template for the thank you page
 thank_you_html = '''
 <!DOCTYPE html>
@@ -162,14 +196,82 @@ thank_you_html = '''
 </html>
 '''
 
-# HTML template for the thank you page after feedback
-thank_you_feedback_html = '''
+# HTML template for the professor login page
+login_html = '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You</title>
+    <title>Professor Login</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/4.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
+</head>
+<body class="p-5">
+    <div class="container col-md-6 offset-md-3 bg-dark p-4 rounded">
+        <h1 class="mb-4">Professor Login</h1>
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Login</button>
+        </form>
+        <a href="/" class="btn btn-info mt-3">Go back to homepage</a>
+    </div>
+</body>
+</html>
+'''
+
+# HTML template for the invalid credentials page
+invalid_credentials_html = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invalid Credentials</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/3.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
+</head>
+<body class="text-center p-5">
+    <div class="container bg-dark p-4 rounded">
+        <h1 class="mb-4">Invalid Credentials</h1>
+        <p>Please try again.</p>
+        <a href="{{ url_for('login') }}" class="btn btn-info mt-3">Go back to Login Page</a>
+    </div>
+</body>
+</html>
+'''
+
+# HTML template for the professor dashboard
+dashboard_html = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -180,11 +282,22 @@ thank_you_feedback_html = '''
         }
     </style>
 </head>
-<body class="text-center p-5">
+<body class="p-5">
     <div class="container bg-dark p-4 rounded">
-        <h1>Thank You for Your Feedback!</h1>
-        <p>Your feedback has been successfully saved.</p>
-        <a href="/" class="btn btn-info mt-3">Go back to the homepage</a>
+        <h1 class="mb-4">Professor Dashboard</h1>
+        <h2>Attendance Data</h2>
+        <div class="mb-3">
+            <a href="{{ url_for('download_csv') }}" class="btn btn-success">Download Attendance CSV</a>
+        </div>
+
+        <h2 class="mt-4">Feedback Data</h2>
+        <div class="mb-3">
+            <a href="{{ url_for('download_feedback_csv') }}" class="btn btn-primary">Download Feedback CSV</a>
+        </div>
+
+        <div>
+            <a href="/" class="btn btn-info">Go back to homepage</a>
+        </div>
     </div>
 </body>
 </html>
@@ -193,7 +306,7 @@ thank_you_feedback_html = '''
 @app.route('/')
 def index():
     # Generate the QR code that links to the form page
-    form_url = "https://25c00628-ed16-4b87-8909-37f01bcf3a98-00-2cxdzekuet8g4.kirk.replit.dev/form"
+    form_url = "https://72293c8c-209f-425a-956c-66c8de7f680e-00-2m212o173vaz3.worf.replit.dev/form"
     qr_code = qrcode.make(form_url)
     qr_code_filename = 'qrcode.png'
 
@@ -248,6 +361,31 @@ def feedback():
         return render_template_string(thank_you_feedback_html)
 
     return render_template_string(feedback_html)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if username == 'professor' and password == 'attendance':
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template_string(invalid_credentials_html)
+
+    return render_template_string(login_html)
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template_string(dashboard_html)
+
+@app.route('/download_csv')
+def download_csv():
+    return send_file(CSV_FILE, as_attachment=True)
+
+@app.route('/download_feedback_csv')
+def download_feedback_csv():
+    return send_file(FEEDBACK_FILE, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
